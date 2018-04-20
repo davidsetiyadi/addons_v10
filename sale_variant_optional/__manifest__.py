@@ -11,12 +11,13 @@
     Sales Custom
 """,
     'website': '',
-    'depends': ['sale','stock','account'],
+    'depends': ['base','sale','stock','account','sale_stock','dev_48_so_additional_field'],
     'data': [
         'views/product_atributtes.xml',
         'views/product_template_views.xml',
         'views/sale_view.xml',
         'views/account_view.xml',
+        'views/sale_report_template.xml',
     ],
     'demo': [],
     'test': [],

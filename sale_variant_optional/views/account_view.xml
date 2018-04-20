@@ -1,19 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-    	<record id="custom_view_invoice_line_form" model="ir.ui.view">
+    	<record id="account_invoice_line_form" model="ir.ui.view">
             <field name="name">account.invoice.line.form</field>
             <field name="model">account.invoice.line</field>
             <field name="inherit_id" ref="account.view_invoice_line_form"/>
             <field name="arch" type="xml">
+                <data>
             	<xpath expr="//label[@for='quantity']" position="before">
-            		<field name="colour_att_value_id"/>
-	                <field name="other_att_value_id" />
-            	</xpath>
+                    <!-- <xpath expr="//group/group/field[@name='product_id']" position="after">       -->
+                		<field name="colour_att_value_id"/>
+    	                <field name="other_att_value_id" />
+                	</xpath>
+                </data>
             </field>
         </record>
 	 	<record id="sale_varian_optional_invoice_form" model="ir.ui.view">
-            <field name="name">account.invoice.form</field>
+            <field name="name">custom.varian.account.invoice.form</field>
             <field name="model">account.invoice</field>
             <field name="inherit_id" ref="account.invoice_form"/>
             <field name="arch" type="xml">

@@ -1,29 +1,18 @@
 # -*- coding: utf-8 -*-
 
-import json
-from lxml import etree
-from datetime import datetime
-from dateutil.relativedelta import relativedelta
-
-from odoo import api, fields, models, _
-from odoo.tools import float_is_zero, float_compare
-from odoo.tools.misc import formatLang
-
-from odoo.exceptions import UserError, RedirectWarning, ValidationError
-
+from odoo import api, fields, models
 import odoo.addons.decimal_precision as dp
-import logging
-
-_logger = logging.getLogger(__name__)
+# _logger = logging.getLogger(__name__)
 
 class AccountInvoiceLine(models.Model):
 	_inherit = "account.invoice.line"
 
-	colour_att_value_id = fields.Many2one('product.attribute.value', string='Colour', change_default=True)
-	other_att_value_id = fields.Many2one('product.attribute.value', string='Other', change_default=True)
-	product_varian_tmpl_id = fields.Many2one('product.template', string='Products', change_default=True)
+	colour_att_value_id = fields.Many2one('product.attribute.value', string='Colour')
+	other_att_value_id = fields.Many2one('product.attribute.value', string='Other')
+	product_varian_tmpl_id = fields.Many2one('product.template', string='Products')
 	is_colour = fields.Boolean('Colour')
 	is_other = fields.Boolean('Other')
+
 
 	@api.onchange('product_id')
 	def _onchange_product_id(self):
