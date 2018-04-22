@@ -39,9 +39,9 @@
                                     <br/><span t-field="o.company_id.zip"/>
                                         <span> - </span>
                                         <span t-field="o.company_id.country_id.name"/>
-                                  <br/><span t-field="o.company_id.phone"/> <span t-field="o.company_id.fax"/></td>
+                                  <br/><i class="fa fa-phone"/> <i class="fa fa-whatsapp"/> <span t-field="o.company_id.phone"/> <span t-field="o.company_id.fax"/></td>
                             <td style="width: 28%; border-left: 0px; border-right: 0px; border-top: 0px;"><b style=" font-size: 16pt;"><font color=" #CD853F">QUOTATION</font></b>
-                                <br/>Att : <span t-field="o.partner_id.child_ids.title"/> <span t-field="o.partner_id.child_ids.name"/> 
+                                <br/>Att : <span t-field="o.partner_id.child_ids.title"/> <span t-field="o.partner_id.name"/> 
                                 <br/><t>Date : <span t-field="o.date_order" t-field-options="{&quot;format&quot;: &quot;dd-MM-yyyy&quot;}"/> </t>
                             </td>
                           </tr>
@@ -54,7 +54,8 @@
                         <table class="table" style="border-bottom: 1px solid #000; border-right: 1px solid #000; margin-top: -10px;">
                           <tr>
                             <th style="border: 1px solid #000; text-align:center; width: 5%;">No</th>
-                            <th style="border: 1px solid #000; text-align:center; width: 38%;">Description</th>
+                            <th style="border: 1px solid #000; text-align:center; width: 28%;">Description</th>
+                            <th style="border: 1px solid #000; text-align:center; width: 10%;">Images</th>
                             <th style="border: 1px solid #000; text-align:center; width: 9%;">QTY</th>
                             <th style="border: 1px solid #000; text-align:center; width: 16%;">Price</th>
                             <th style="border: 1px solid #000; text-align:center; width: 16%;">Price After Discount</th>
@@ -69,8 +70,10 @@
                               <!-- <span t-esc="sp_detail.product_id.name"></span> -->
                               <!-- <span t-esc="sp_detail.product_id.attribute_value_ids[0].name"></span> -->
                               <span t-esc="sp_detail.name"></span>
-                              <span t-field="sp_detail.product_id.image_medium"
-                        t-field-options='{"widget": "image", "class": "img-rounded"}' style="max-height: 45px" />
+                            </td>
+                            <td>
+                              <span t-field="sp_detail.product_id.image_small"
+                        t-field-options='{"widget": "image", "class": "img-rounded"}' style="max-height: 25px" />
                             </td>   
                             <td>
                               <span t-esc="int(float(sp_detail.product_uom_qty))"></span>
@@ -91,7 +94,7 @@
                             <t t-set="no_increment" t-value="no_increment+1"/>
                           </tr>
                           <tr>
-                            <td colspan="4" rowspan="8" style="border-left: 1px solid #000; border-top: 1px solid #000; border-bottom: 1px solid #000; font-size: 8pt;">
+                            <td colspan="5" rowspan="8" style="border-left: 1px solid #000; border-top: 1px solid #000; border-bottom: 1px solid #000; font-size: 8pt;">
                               <span>Ketentuan
                                 <br/>1. Waktu produksi 30 hari kerja dari tanggal Commitment Payment.
                                 <br/>2. Harga sudah termasuk biaya pengiriman JADETABEK.
