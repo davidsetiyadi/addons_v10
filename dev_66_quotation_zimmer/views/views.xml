@@ -66,9 +66,12 @@
                                 <span t-esc="no_increment"/>
                             </td>
                             <td>
-                              <span t-esc="sp_detail.product_id.name"></span>
-                              <span t-esc="sp_detail.product_id.attribute_value_ids[0].name"></span>
-                            </td>
+                              <!-- <span t-esc="sp_detail.product_id.name"></span> -->
+                              <!-- <span t-esc="sp_detail.product_id.attribute_value_ids[0].name"></span> -->
+                              <span t-esc="sp_detail.name"></span>
+                              <span t-field="sp_detail.product_id.image_medium"
+                        t-field-options='{"widget": "image", "class": "img-rounded"}' style="max-height: 45px" />
+                            </td>   
                             <td>
                               <span t-esc="int(float(sp_detail.product_uom_qty))"></span>
                               <span t-esc="sp_detail.product_id.uom_id.name"></span>
