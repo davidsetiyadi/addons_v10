@@ -7,6 +7,7 @@
     "author": "Joenan <joenannr@gmail.com>",
     "category": "",
     "description" : """Custom Sales Order""",
+    'depends': ['base','sale','sale_discount_total'],
     'data': [
         'views/sale_view.xml',
     ],
