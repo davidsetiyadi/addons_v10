@@ -23,11 +23,11 @@ class SaleOrder(models.Model):
     def _partner_order_count(self):
         for sale in self:
             # if sale.state == 'draft':
-            # counts = [order.partner_order_count for order in self.search([('partner_id', '=', sale.partner_id.id)])]
-            counts = sale.partner_id.sale_order_count
+            counts = [order.id for order in self.search([('partner_id', '=', sale.partner_id.id),('state','in',('sale','done'))])]
+            # counts = sale.partner_id.sale_order_count
             if counts:
                 # i = max(counts)
-                sale.partner_order_count = sale.partner_id.sale_order_count
+                sale.partner_order_count = len(counts)#sale.partner_id.sale_order_count
             
     partner_order_count = fields.Integer(string='Repeat Order', compute='_partner_order_count', store=True)
     commission_amount = fields.Float(string='Commission', compute='_get_commission', store=True)
@@ -51,12 +51,12 @@ class SaleOrder(models.Model):
 #             self.partner_order_count = i
 #         return {}
     
-    @api.multi
-    def action_confirm(self):
-        res = super(SaleOrder, self).action_confirm()
-        for order in self:
-            counts = [sale.partner_order_count for sale in self.search([('partner_id', '=', order.partner_id.id)])]
-            if counts:
-                i = max(counts)
-                order.partner_order_count = i + 1
-        return res
+    # @api.multi
+    # def action_confirm(self):
+    #     res = super(SaleOrder, self).action_confirm()
+    #     for order in self:
+    #         counts = [sale.partner_order_count for sale in self.search([('partner_id', '=', order.partner_id.id)])]
+    #         if counts:
+    #             i = max(counts)
+    #             order.partner_order_count = i + 1
+    #     return res
