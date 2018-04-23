@@ -29,7 +29,7 @@ class SaleOrder(models.Model):
                 # i = max(counts)
                 sale.partner_order_count = len(counts)#sale.partner_id.sale_order_count
             
-    partner_order_count = fields.Integer(string='Repeat Order', compute='_partner_order_count', store=True)
+    partner_order_count = fields.Integer(string='Repeat Order', compute='_partner_order_count', store=False)
     commission_amount = fields.Float(string='Commission', compute='_get_commission', store=True)
     bank_charge = fields.Float(string='Bank Charge')
     fee = fields.Float(string='Fee')

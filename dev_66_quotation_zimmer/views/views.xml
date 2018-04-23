@@ -31,8 +31,8 @@
                             <td style="width: 32%; border-left: 0px; border-right: 0px; border-top: 0px">
                               <img t-if="o.company_id.logo" t-att-src="'data:image/png;base64,%s' % o.company_id.logo" style="width:80%; height:75px;"/>
                             </td>
-                            <td style="width: 40%; border-left: 0px; border-right: 0px; border-top: 0px">
-                                <b><span t-field="o.company_id.name" style="font-size: 16pt;"/></b>
+                            <td style="width: 43%; border-left: 0px; border-right: 0px; border-top: 0px">
+                                <b><span t-field="o.company_id.name" style="font-size: 15pt;"/></b>
                                     <br/><span t-field="o.company_id.street"/>
                                           <span t-field="o.company_id.street2"/>
                                     <br/><span t-field="o.company_id.city"/>
@@ -40,7 +40,7 @@
                                         <span> - </span>
                                         <span t-field="o.company_id.country_id.name"/>
                                   <br/><i class="fa fa-phone"/> <i class="fa fa-whatsapp"/> <span t-field="o.company_id.phone"/> <span t-field="o.company_id.fax"/></td>
-                            <td style="width: 28%; border-left: 0px; border-right: 0px; border-top: 0px;"><b style=" font-size: 16pt;"><font color=" #CD853F">QUOTATION</font></b>
+                            <td style="width: 25%; border-left: 0px; border-right: 0px; border-top: 0px;"><b style=" font-size: 16pt;"><font color=" #CD853F">QUOTATION</font></b>
                                 <br/>Att : <span t-field="o.partner_id.child_ids.title"/> <span t-field="o.partner_id.name"/> 
                                 <br/><t>Date : <span t-field="o.date_order" t-field-options="{&quot;format&quot;: &quot;dd-MM-yyyy&quot;}"/> </t>
                             </td>
