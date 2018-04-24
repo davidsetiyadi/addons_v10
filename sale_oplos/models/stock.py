@@ -22,14 +22,17 @@ class StockMove(models.Model):
 	def onchange_product_id(self):
 		product = self.product_id.with_context(lang=self.partner_id.lang or self.env.user.lang)
 		self.name = product.partner_ref
-		oplos_template_ids = False
+		oplos_template_ids = []
 		self.product_uom = product.uom_id.id
 		self.product_uom_qty = 1.0
 		for oplos in product.product_tmpl_id.sale_oplos_ids:	
 			oplos_template_ids.append(oplos.id)
-
-		return {'domain': {	'product_uom': [('category_id', '=', product.uom_id.category_id.id)],
+		if oplos_template_ids:
+			return {'domain': {	'product_uom': [('category_id', '=', product.uom_id.category_id.id)],
 							'oplos_template_id': [('id','in',oplos_template_ids)]}}
+		else:
+			return {'domain': {	'product_uom': [('category_id', '=', product.uom_id.category_id.id)],
+							'oplos_template_id': [('id','=',False)]}}
 
 	@api.multi
 	@api.onchange('oplos_template_id')
@@ -39,11 +42,9 @@ class StockMove(models.Model):
 		vals = {}
 		# name = ''
 		product = self.product_id.with_context(
-			lang=self.order_id.partner_id.lang,
-			partner=self.order_id.partner_id.id,
+			lang=self.picking_id.partner_id.lang,
+			partner=self.picking_id.partner_id.id,
 			quantity=self.product_uom_qty,
-			date=self.order_id.date_order,
-			pricelist=self.order_id.pricelist_id.id,
 			uom=self.product_uom.id
 		)
 		name = product.name_get()[0][1]
