@@ -54,3 +54,51 @@ class StockMove(models.Model):
 		
 		
 		self.update(vals)
+
+class Picking(models.Model):
+	_inherit = "stock.picking"
+
+	# TDE FIXME: separate those two kind of pack operations
+	citi_stock_picking_line_ids = fields.One2many(
+		'citi.stock.picking.line', 'picking_id', 'Product Sale',
+		readonly=True)
+
+	@api.multi
+	def do_print_picking(self):
+		self.write({'printed': True})
+		# print 'action_confirmss-sad------------',self.sale_id.name
+		if self.citi_stock_picking_line_ids:
+			for product_sale in self.citi_stock_picking_line_ids:
+				product_sale.unlink()
+		if self.sale_id:
+			line_data = []		
+			line_dict = {}	
+			for line in self.sale_id.order_line:
+				line_dict = {
+					'product_id': line.product_id.id,
+					'product_uom_id': line.product_uom.id,
+					'ordered_qty':line.product_uom_qty,
+					'product_uom_qty': line.product_uom_qty,
+					'oplos_template_id':line.oplos_template_id.id,
+				}
+				line_data.append( (0, 0, line_dict) )
+				# self.write({'citi_stock_picking_line_ids':[(0, 0, line_dict)] })
+			if line_data:
+				self.write({'citi_stock_picking_line_ids': line_data })
+		return self.env["report"].get_action(self, 'stock.report_picking')
+
+class CitiStockPickingLine(models.Model):
+	_name = "citi.stock.picking.line"
+	_description = "Citi Stock Picking"
+
+	
+	picking_id = fields.Many2one(
+		'stock.picking', 'Stock Picking',
+		required=True,
+		help='The stock operation where the packing has been made')
+	product_id = fields.Many2one('product.product', 'Product', ondelete="cascade")
+	product_uom_id = fields.Many2one('product.uom', 'Unit of Measure')
+	name = fields.Char('Name')
+	ordered_qty = fields.Float('Ordered Quantity', digits=dp.get_precision('Product Unit of Measure'))
+	product_uom_qty = fields.Float('Ordered Quantity', digits=dp.get_precision('Product Unit of Measure'))
+	oplos_template_id = fields.Many2one('product.template', string='Oplos', change_default=True)

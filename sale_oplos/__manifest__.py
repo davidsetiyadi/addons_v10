@@ -11,7 +11,7 @@
     Sales Oplos
 """,
     'website': '',
-    'depends': ['sale','sale_stock','stock','vit_efaktur'],
+    'depends': ['base','sale','sale_stock','stock','stock_account','vit_efaktur','product_bundle_pack'],
     'data': [
         # 'security/ir.model.access.csv',
         'views/product_template_views.xml',

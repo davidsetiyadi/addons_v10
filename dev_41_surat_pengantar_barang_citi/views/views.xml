@@ -65,7 +65,7 @@
                             <th style="border: 1px solid #000; text-align: center;">Jumlah</th>
                           </tr>
                           <t t-set="no_increment" t-value="1"/>
-                          <tr t-foreach="o.move_lines" t-as="sp_detail">
+                          <tr t-foreach="o.citi_stock_picking_line_ids" t-as="sp_detail">
                             <td style="border-left: 1px solid #000; border-bottom: 1px solid #000; text-align: center;">
                               <span t-esc="no_increment"/>
                             </td>
