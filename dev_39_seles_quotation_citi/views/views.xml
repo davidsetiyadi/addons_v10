@@ -152,9 +152,15 @@
                               <t t-set="price" t-value="sp_detail.oplos_template_id.list_price * sp_detail.product_uom_qty"/>
                             </td>
 
-                            <td style="border-bottom: 1px solid #000;border-left: 1px solid #000; border-right: 1px solid #000; text-align: center;">
-                              <span t-esc="'{:,}'.format(int(float(sp_detail.discount)))"/>
-                              <!-- <span>%</span> -->
+                            <td t-if="not sp_detail.oplos_template_id" style="border-bottom: 1px solid #000;border-left: 1px solid #000; border-right: 1px solid #000; text-align: center;">
+                              <span t-esc="'{:,}'.format(int(float( sum_discount(sp_detail.price_unit, sp_detail)  )))"/>
+                              <span>%</span>
+                               <!-- <span t-esc="sum_discount(sp_detail.discount, o)"/> -->
+                            </td>
+
+                            <td t-if="sp_detail.oplos_template_id" style="border-bottom: 1px solid #000;border-left: 1px solid #000; border-right: 1px solid #000; text-align: center;">
+                              <span t-esc="'{:,}'.format(int(float(sum_discount(sp_detail.oplos_template_id.list_price, sp_detail) ) ) )"/>
+                              <span>%</span>
                             </td>
 
 
@@ -196,7 +202,7 @@
                     <td style="border-bottom: 1px solid #000; border-top: 1px solid #000; text-align:right;">
                       <span t-esc="o.company_id.currency_id.symbol"></span>
                       <!-- <span t-esc="'{:,}'.format(int(float(o.amount_total)))"/>   -->
-                      <span t-esc="'{:,}'.format(int(float(total_price - o.amount_tax)))"/>  
+                      <span t-esc="'{:,}'.format(int(float(total_price + o.amount_tax)))"/>  
                     </td>
                   </tr>
                 </table>
