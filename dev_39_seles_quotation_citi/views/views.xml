@@ -143,7 +143,7 @@
                             <td t-if="not sp_detail.oplos_template_id" style="border-bottom: 1px solid #000;border-left: 1px solid #000; border-right: 1px solid #000; text-align: right;">
                               <span t-esc="sp_detail.product_id.currency_id.symbol"></span>
                               <span t-esc="'{:,}'.format(int(float(sp_detail.price_unit)))"></span>
-                              <t t-set="total_price" t-value="total_price + sp_detail.price_unit"/>
+                              <t t-set="total_price" t-value="total_price + sp_detail.price_subtotal"/>
                             </td>
                             <td t-if="sp_detail.oplos_template_id" style="border-bottom: 1px solid #000;border-left: 1px solid #000; border-right: 1px solid #000; text-align: right;">
                               <span t-esc="sp_detail.product_id.currency_id.symbol"></span>
