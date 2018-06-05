@@ -1,3 +1,2 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_custom_sale_oplos,custom.sale.oplos,model_custom_sale_oplos,,1,1,1,1
-access_citi_stock_picking_line,citi.stock.picking.line,model_citi_stock_picking_line,,1,1,1,1
