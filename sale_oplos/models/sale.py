@@ -23,6 +23,34 @@ class ProcurementOrder(models.Model):
 		})
 		return vals
 
+class SaleOrder(models.Model):
+	_inherit = "sale.order"
+
+	@api.multi
+	def print_surat_jalan(self):
+		'''
+		This function returns an action that display existing delivery orders
+		of given sales order ids. It can either be a in a list or in a form
+		view, if there is only one delivery order to show.
+		'''
+		action = self.env.ref('stock.action_picking_tree_all').read()[0]
+
+		pickings = self.mapped('picking_ids')
+		# if len(pickings) > 1:
+			# action['domain'] = [('id', 'in', pickings.ids)]
+		for picking_id in pickings.ids:
+			picking = self.env['stock.picking'].browse(picking_id)
+			print 'pickings. . . . ',picking
+			return picking.do_print_picking()
+		# elif pickings:
+			# action['views'] = [(self.env.ref('stock.view_picking_form').id, 'form')]
+			# action['res_id'] = pickings.id
+			# print 'pickings',pickings
+			# self.env['stock.picking'].do_print_picking(pickings)
+			# pickings.do_print_picking()
+
+		return True
+
 class SaleOrderLine(models.Model):
 	_inherit = 'sale.order.line'
 
