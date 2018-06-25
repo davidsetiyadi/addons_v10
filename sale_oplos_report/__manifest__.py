@@ -11,11 +11,13 @@
     Sales Oplos
 """,
     'website': '',
-    'depends': ['sale','sale_stock','stock','vit_efaktur','sale_oplos'],
+    'depends': ['sale','sale_stock','stock','sale_stock','vit_efaktur','sale_oplos'],
     'data': [
         # 'security/ir.model.access.csv',
         'views/oplos_report.xml',
         'report/oplos_report.xml',
+        'report/report_invoice.xml',
+        'report/proforma_invoice.xml',
         # 'views/account_views.xml',
         # 'views/stock_views.xml',
     ],
