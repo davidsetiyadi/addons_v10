@@ -66,7 +66,6 @@ class Picking(models.Model):
 	@api.multi
 	def do_print_picking(self):
 		self.write({'printed': True})
-		print 'action_confirmss-sad------------',self.sale_id.name
 		if self.citi_stock_picking_line_ids:
 			for product_sale in self.citi_stock_picking_line_ids:
 				product_sale.unlink()
