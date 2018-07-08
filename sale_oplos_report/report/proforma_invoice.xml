@@ -33,8 +33,8 @@
 	                   
 	                </tr>
                         <tr>
-		                  <td style="border-color: white; border-bottom: 0px;border-left: 0px; border-right: 0px; text-align: left;">Nomor : <span t-field="o.number"/></td>
-		                  <td style="border-color: white; border-bottom: 0px;border-left: 0px; border-right: 0px; text-align: left;">Tanggal : <span t-field="o.date_invoice" t-field-options="{&quot;format&quot;: &quot;dd-MM-yyyy&quot;}"/></td>
+		                  <td style="border-color: white; border-bottom: 0px;border-left: 0px; border-right: 0px; text-align: left;">Nomor : <span t-field="o.name"/></td>
+		                  <td style="border-color: white; border-bottom: 0px;border-left: 0px; border-right: 0px; text-align: left;">Tanggal : <span t-field="o.date_order" t-field-options="{&quot;format&quot;: &quot;dd-MM-yyyy&quot;}"/></td>
 		                </tr>
 		                <tr>
 		                  <td style="border-color: white; border-bottom: 0px;border-left: 0px; border-right: 0px; text-align: left;">Kepada : <span t-field="o.partner_id.name"/></td>
@@ -64,7 +64,7 @@
                   </tr>
                     <t t-set="no_increment" t-value="1"/>
                     <t t-set="total_price" t-value="0"/>
-                    <tr t-foreach="o.invoice_line_ids" t-as="inv_detail">
+                    <tr t-foreach="o.order_line" t-as="inv_detail">
                             <td style="text-align: center; border-bottom: 1px solid #000;border-left: 1px solid #000; border-right: 1px solid #000;">
                               
                                 <span t-esc="no_increment"/>
@@ -79,11 +79,11 @@
 
 
                             <td t-if="not inv_detail.oplos_template_id" style="border-bottom: 1px solid #000;border-left: 1px solid #000; border-right: 1px solid #000; text-align: center;">
-                                  <span t-esc="int(float(inv_detail.quantity))"></span>
+                                  <span t-esc="int(float(inv_detail.product_uom_qty))"></span>
                                   <span t-esc="inv_detail.product_id.uom_id.name"></span>
                             </td>
                             <td t-if="inv_detail.oplos_template_id" style="border-bottom: 1px solid #000;border-left: 1px solid #000; border-right: 1px solid #000; text-align: center;">
-                                  <span t-esc="int(float(inv_detail.quantity))"></span>
+                                  <span t-esc="int(float(inv_detail.product_uom_qty))"></span>
                                   <span t-esc="inv_detail.oplos_template_id.uom_id.name"></span>
                             </td>
 
@@ -119,8 +119,8 @@
                             </td>
                             <td t-if="inv_detail.oplos_template_id" style="border-bottom: 1px solid #000;border-left: 1px solid #000; border-right: 1px solid #000; text-align: right;">
                                 <span t-esc="inv_detail.product_id.currency_id.symbol"></span>
-                                <span t-esc="'{:,}'.format(int(float(inv_detail.oplos_template_id.list_price * inv_detail.quantity - inv_detail.discount)))"></span>
-                                 <t t-set="total_price" t-value="total_price + (inv_detail.oplos_template_id.list_price * inv_detail.quantity - inv_detail.discount) "/>
+                                <span t-esc="'{:,}'.format(int(float(inv_detail.oplos_template_id.list_price * inv_detail.product_uom_qty - inv_detail.discount)))"></span>
+                                 <t t-set="total_price" t-value="total_price + (inv_detail.oplos_template_id.list_price * inv_detail.product_uom_qty - inv_detail.discount) "/>
                             </td>
 
                             <t t-set="no_increment" t-value="no_increment+1"/>

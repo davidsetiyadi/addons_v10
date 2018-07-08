@@ -25,11 +25,11 @@
                 <button name="print_quotation" position="after">
                     <button name="print_surat_jalan" string="Print Surat Jalan" type="object" attrs="{'invisible': [('delivery_count', '=', 0)]}"/>
                     <button name="print_invoice" string="Print Invoice" type="object" attrs="{'invisible': [('invoice_count', '=', 0)]}"/>
-                    <button name="print_proforma" string="Print Proforma" type="object" attrs="{'invisible': [('invoice_count', '=', 0)]}"/>
+                    <button name="print_proforma" string="Print Proforma" type="object"/>
                 </button>                
             </field>
         </record>
-        
+        <!-- attrs="{'invisible': [('invoice_count', '=', 0)]}" -->
 
     </data>
 </odoo>

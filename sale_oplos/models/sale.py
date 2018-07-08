@@ -62,9 +62,9 @@ class SaleOrder(models.Model):
 	@api.multi
 	def print_proforma(self):
 		for order in self:
-			invoice_ids = order.order_line.mapped('invoice_lines').mapped('invoice_id')
-			for invoice in invoice_ids:
-				return self.env["report"].get_action(invoice, 'sale_oplos_report.report_proforma')
+			# invoice_ids = order.order_line.mapped('invoice_lines').mapped('invoice_id')
+			# for invoice in invoice_ids:
+			return self.env["report"].get_action(self, 'sale_oplos_report.report_proforma')
 
 class SaleOrderLine(models.Model):
 	_inherit = 'sale.order.line'

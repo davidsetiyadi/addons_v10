@@ -52,7 +52,7 @@
         paperformat="sale_oplos_report.paperformat_lowmargin"/>
     <report 
         id="oplos_report_proforma"
-        model="account.invoice"
+        model="sale.order"
         string="Proforma Invoice"
         report_type="qweb-pdf"
         name="sale_oplos_report.report_proforma"
