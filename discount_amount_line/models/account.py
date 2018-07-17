@@ -35,6 +35,9 @@ class AccountInvoiceLine(models.Model):
         sign = self.invoice_id.type in ['in_refund', 'out_refund'] and -1 or 1
         self.price_subtotal_signed = price_subtotal_signed * sign
 
+class AccountInvoice(models.Model):
+    _inherit = "account.invoice"
+    
     @api.multi
     def get_taxes_values(self):
         tax_grouped = {}
