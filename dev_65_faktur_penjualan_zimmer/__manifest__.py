@@ -20,7 +20,7 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base','report','account','dev_57_so_customer_address','dev_48_so_additional_field'],
+    'depends': ['base','report','account','sale','dev_57_so_customer_address','dev_48_so_additional_field'],
 
     # always loaded
     'data': [
