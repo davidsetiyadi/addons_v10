@@ -69,7 +69,23 @@ class SaleOrder(models.Model):
 class SaleOrderLine(models.Model):
 	_inherit = 'sale.order.line'
 
-	oplos_template_id = fields.Many2one('product.template', string='Oplos', change_default=True)
+	@api.model
+	def create(self, values):
+		onchange_fields = ['name', 'price_unit', 'product_uom', 'tax_id']
+		if values.get('order_id') and values.get('product_id') and any(f not in values for f in onchange_fields):
+			line = self.new(values)
+			# line.product_id_change()
+			line.oplos_id_change()
+			for field in onchange_fields:
+				if field not in values:
+					values[field] = line._fields[field].convert_to_write(line[field], line)
+		line = super(SaleOrderLine, self).create(values)
+		if line.state == 'sale':
+			line._action_procurement_create()
+
+		return line
+
+	oplos_template_id = fields.Many2one('product.template', string='Oplos', change_default=True, ondelete='restrict')
 
 	@api.multi
 	@api.onchange('product_id')
@@ -142,6 +158,10 @@ class SaleOrderLine(models.Model):
 			return False
 		vals = {}
 		name = ''
+		domain = {'product_uom': [('category_id', '=', self.product_id.uom_id.category_id.id)]}
+		if not self.product_uom or (self.product_id.uom_id.category_id.id != self.product_uom.category_id.id):
+			vals['product_uom'] = self.product_id.uom_id
+
 		product = self.product_id.with_context(
 			lang=self.order_id.partner_id.lang,
 			partner=self.order_id.partner_id.id,
@@ -154,7 +174,9 @@ class SaleOrderLine(models.Model):
 		vals['name'] = name
 		if self.oplos_template_id:
 			vals['name'] = self.oplos_template_id.name_get()[0][1]
-		
+		if self.order_id.pricelist_id and self.order_id.partner_id:			
+			vals['price_unit'] = self.env['account.tax']._fix_tax_included_price(self._get_display_price(product), product.taxes_id, self.tax_id)
+
 		
 		self.update(vals)
 
@@ -179,3 +201,5 @@ class SaleOrderLine(models.Model):
 		# })
 		vals[0]['oplos_template_id'] = self.oplos_template_id.id
 		return vals
+
+	

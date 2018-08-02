@@ -35,7 +35,7 @@ class ProductProduct(models.Model):
         if not args:
             args = []
         if name:
-            print 'david. . . ........................'
+            # print 'david. . . ........................'
             positive_operators = ['=', 'ilike', '=ilike', 'like', '=like']
             products = self.env['product.product']
             if operator in positive_operators:
