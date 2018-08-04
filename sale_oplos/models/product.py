@@ -26,54 +26,54 @@ class ProductTemplate(models.Model):
 
 		return [(template.id, '%s%s' % (template.default_code and '[%s] ' % template.default_code or '', template.name))
 				for template in self]
-
+				
 class ProductProduct(models.Model):
-    _inherit = "product.product"
+	_inherit = "product.product"
 
-    @api.model
-    def name_search(self, name='', args=None, operator='ilike', limit=100):
-        if not args:
-            args = []
-        if name:
-            # print 'david. . . ........................'
-            positive_operators = ['=', 'ilike', '=ilike', 'like', '=like']
-            products = self.env['product.product']
-            if operator in positive_operators:
-                products = self.search([('default_code', '=', name)] + args, limit=limit)
-                if not products:
-                    products = self.search([('barcode', '=', name)] + args, limit=limit)
-                    if not products:
-                    	products = self.search([('ace_code', '=', name)] + args, limit=limit)
-            
-            if not products and operator not in expression.NEGATIVE_TERM_OPERATORS:
-                # Do not merge the 2 next lines into one single search, SQL search performance would be abysmal
-                # on a database with thousands of matching products, due to the huge merge+unique needed for the
-                # OR operator (and given the fact that the 'name' lookup results come from the ir.translation table
-                # Performing a quick memory merge of ids in Python will give much better performance
-                products = self.search(args + [('default_code', operator, name)], limit=limit)
-                if not limit or len(products) < limit:
-                    # we may underrun the limit because of dupes in the results, that's fine
-                    limit2 = (limit - len(products)) if limit else False
-                    products += self.search(args + [('name', operator, name), ('id', 'not in', products.ids)], limit=limit2)
-            elif not products and operator in expression.NEGATIVE_TERM_OPERATORS:
-                products = self.search(args + ['&', ('default_code', operator, name), ('name', operator, name)], limit=limit)
-            if not products and operator in positive_operators:
-                ptrn = re.compile('(\[(.*?)\])')
-                res = ptrn.search(name)
-                if res:
-                    products = self.search([('default_code', '=', res.group(2))] + args, limit=limit)
-            # still no results, partner in context: search on supplier info as last hope to find something
-            if not products and self._context.get('partner_id'):
-                suppliers = self.env['product.supplierinfo'].search([
-                    ('name', '=', self._context.get('partner_id')),
-                    '|',
-                    ('product_code', operator, name),
-                    ('product_name', operator, name)])
-                if suppliers:
-                    products = self.search([('product_tmpl_id.seller_ids', 'in', suppliers.ids)], limit=limit)
-        else:
-            products = self.search(args, limit=limit)
-        return products.name_get()
+	@api.model
+	def name_search(self, name='', args=None, operator='ilike', limit=100):
+		if not args:
+			args = []
+		if name:
+			# print 'david. . . ........................'
+			positive_operators = ['=', 'ilike', '=ilike', 'like', '=like']
+			products = self.env['product.product']
+			if operator in positive_operators:
+				products = self.search([('default_code', '=', name)] + args, limit=limit)
+				if not products:
+					products = self.search([('barcode', '=', name)] + args, limit=limit)
+					if not products:
+						products = self.search([('ace_code', '=', name)] + args, limit=limit)
+			
+			if not products and operator not in expression.NEGATIVE_TERM_OPERATORS:
+				# Do not merge the 2 next lines into one single search, SQL search performance would be abysmal
+				# on a database with thousands of matching products, due to the huge merge+unique needed for the
+				# OR operator (and given the fact that the 'name' lookup results come from the ir.translation table
+				# Performing a quick memory merge of ids in Python will give much better performance
+				products = self.search(args + [('default_code', operator, name)], limit=limit)
+				if not limit or len(products) < limit:
+					# we may underrun the limit because of dupes in the results, that's fine
+					limit2 = (limit - len(products)) if limit else False
+					products += self.search(args + [('name', operator, name), ('id', 'not in', products.ids)], limit=limit2)
+			elif not products and operator in expression.NEGATIVE_TERM_OPERATORS:
+				products = self.search(args + ['&', ('default_code', operator, name), ('name', operator, name)], limit=limit)
+			if not products and operator in positive_operators:
+				ptrn = re.compile('(\[(.*?)\])')
+				res = ptrn.search(name)
+				if res:
+					products = self.search([('default_code', '=', res.group(2))] + args, limit=limit)
+			# still no results, partner in context: search on supplier info as last hope to find something
+			if not products and self._context.get('partner_id'):
+				suppliers = self.env['product.supplierinfo'].search([
+					('name', '=', self._context.get('partner_id')),
+					'|',
+					('product_code', operator, name),
+					('product_name', operator, name)])
+				if suppliers:
+					products = self.search([('product_tmpl_id.seller_ids', 'in', suppliers.ids)], limit=limit)
+		else:
+			products = self.search(args, limit=limit)
+		return products.name_get()
 
 # class CustomSaleOplos(models.Model):
 # 	_name = "custom.sale.oplos"

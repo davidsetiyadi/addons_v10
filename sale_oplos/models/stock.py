@@ -101,3 +101,13 @@ class CitiStockPickingLine(models.Model):
 	ordered_qty = fields.Float('Ordered Quantity', digits=dp.get_precision('Product Unit of Measure'))
 	product_uom_qty = fields.Float('Ordered Quantity', digits=dp.get_precision('Product Unit of Measure'))
 	oplos_template_id = fields.Many2one('product.template', string='Oplos', change_default=True)
+
+class Quant(models.Model):
+	_inherit = "stock.quant"
+
+	ace_code = fields.Char( string='ACE Code', related='product_id.product_tmpl_id.ace_code',readonly=True)
+
+class stock_summary_line(models.Model):
+	_inherit 		= "vit.stock_summary_line"
+
+	ace_code = fields.Char( string='ACE Code', related='product_id.product_tmpl_id.ace_code',readonly=True)

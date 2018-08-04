@@ -1,5 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <record id="view_stock_summary_form" model="ir.ui.view">
+            <field name="name">vit_stock_summary_form</field>
+            <field name="model">vit.stock_summary</field>
+            <field name="inherit_id" ref="vit_stock_card_pro.view_stock_summary_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//notebook" position="replace">
+                    <notebook>
+                        <page string="Lines">
+                            <field name="line_ids">
+                                <tree string="Detail Lines" widget="one2many_list" context="{'group_by':'product_id'}">
+                                    <field name="product_id" />
+                                    <field name="ace_code" />
+                                    <field name="lot_id" />
+                                    <field name="expired_date" />
+                                    <field name="qty_start" />
+                                    <field name="qty_in" />     
+                                    <field name="qty_out" />        
+                                    <field name="qty_balance" />    
+                                    <field name="product_uom_id" />
+                                    <field name="stock_move_id" />
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </xpath>
+                        
+            </field>
+        </record>
+
+    <record model="ir.ui.view" id="view_oplos_stock_quant_tree">
+        <field name="name">stock.quant.tree</field>
+        <field name="model">stock.quant</field>
+        <field eval="10" name="priority"/>
+        <field name="inherit_id" ref="stock.view_stock_quant_tree"/>
+        <field name="arch" type="xml">
+            <field name="product_id" position="after">
+                <field name="ace_code" options="{'no_create': True}"/>
+            </field>
+        </field>
+    </record>
+
     <record id="view_oplos_picking_form" model="ir.ui.view">
         <field name="name">stock.picking.form</field>
         <field name="model">stock.picking</field>
