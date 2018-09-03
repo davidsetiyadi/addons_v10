@@ -86,35 +86,46 @@
                         <td style="border-color: black; border: 1px solid black !important;" colspan="2" class="text-left">Harga Jual / Penggantian
                         </td> 
                          <td style="border-color: black; border: 1px solid black !important;" class="text-right"> <!-- harga sebelum diskon -->
-                            <span t-esc="harga_jual" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                            <!-- <span t-esc="harga_jual" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/> -->
+                            <span t-esc="o.company_id.currency_id.symbol"></span>
+                            <span t-esc="'{:,}'.format(int(float(o.amount_untaxed)))"/>
                         </td>                      
                     </tr>
                     <tr>
                         <td style="border-color: black; border: 1px solid black !important;" colspan="2" class="text-left">Dikurangi Potongan Harga
                         </td> 
                          <td style="border-color: black; border: 1px solid black !important;" class="text-right"> <!-- diskon -->
-                            <span t-esc="potongan_harga" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                             <span t-esc="o.company_id.currency_id.symbol"></span>
+                            <span t-esc="'{:,}'.format(int(float(potongan_harga)))"/>
+                            <!-- <span t-esc="potongan_harga" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/> -->
                         </td>                      
                     </tr>
                      <tr>
                         <td style="border-color: black; border: 1px solid black !important;" colspan="2" class="text-left">Dikurangi Uang Muka
                         </td> 
                          <td style="border-color: black; border: 1px solid black !important;" class="text-right">
-                            <span t-esc="uang_muka" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                             <span t-esc="o.company_id.currency_id.symbol"></span>
+                            <span t-esc="'{:,}'.format(int(float(uang_muka)))"/>
+                            <!-- <span t-esc="uang_muka" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/> -->
                         </td>                      
                     </tr>
                     <tr>
                         <td style="border-color: black; border: 1px solid black !important;" colspan="2" class="text-left">Dasar Pengenaan Pajak
                         </td> 
                          <td style="border-color: black; border: 1px solid black !important;" class="text-right">
-                            <span t-esc="harga_jual - potongan_harga" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                            <span t-esc="o.company_id.currency_id.symbol"></span>
+                            <span t-esc="'{:,}'.format(int(float(o.amount_untaxed)))"/>
+                            <!-- <span t-esc="harga_jual - potongan_harga" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/> -->
                         </td>                      
                     </tr>
                     <tr>
                         <td style="border-color: black; border: 1px solid black !important;" colspan="2" class="text-left">PPN = 10 % x Dasar Pengenaan Pajak
                         </td> 
+
                          <td style="border-color: black; border: 1px solid black !important;" class="text-right">
-                            <span t-esc="(harga_jual - potongan_harga) * 0.1" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                            <span t-esc="o.company_id.currency_id.symbol"></span>
+                            <span t-esc="'{:,}'.format(int(float(o.amount_tax)))"/>  
+                            <!-- <span t-esc="(harga_jual - potongan_harga) * 0.1" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/> -->
                         </td>                      
                     </tr>
                     <tr>

@@ -67,10 +67,10 @@
         report_type="qweb-pdf"
         name="account.report_invoice"
         file="account.report_invoice"
-        attachment_use="True"
-        attachment="(object.state in ('open','paid')) and ('INV'+(object.number or '').replace('/','')+'.pdf')"
+        
         paperformat="sale_oplos_report.paperformat_a4_custom"/>
-
+<!-- attachment_use="True" -->
+        <!-- attachment="(object.state in ('open','paid')) and ('INV'+(object.number or '').replace('/','')+'.pdf')" -->
            
     </data>
 </odoo>

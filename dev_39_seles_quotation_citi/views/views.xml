@@ -82,20 +82,24 @@
               <br/><br/><br/><br/><br/><br/>
 
 
-                <table class="table" style="border-right: 1px solid #000; margin-top: -10px;">
-                  <tr>
-                    <th style="text-align: center; border: 1px solid #000; background-color:#B0E0E6; width: 20px">NO.</th>
-                    <th style="text-align: center; border: 1px solid #000; background-color:#B0E0E6; width: 100px">PICTURE</th>
-                    <th style="text-align: center; border: 1px solid #000; background-color:#B0E0E6; width: 80px">CATEGORY</th>
-                    <th style="text-align: center; border: 1px solid #000; background-color:#B0E0E6; width: 120px">ITEM</th>
-                    <th style="text-align: center; border: 1px solid #000; background-color:#B0E0E6; width: 140px">DESCRIPTION</th>
-                    <th style="text-align: center; border: 1px solid #000; background-color:#B0E0E6; width: 50px">QTY</th>
-                    <th style="text-align: center; border: 1px solid #000; background-color:#B0E0E6; width: 120px">PRICE LIST</th>
-                    <th style="text-align: center; border: 1px solid #000; background-color:#B0E0E6; width: 50px">DISC</th>
-                    <th style="text-align: center; border: 1px solid #000; background-color:#B0E0E6; width: 160px">TOTAL</th>
-                  </tr>
+                <table class="table table-condensed table-striped table-bordered" style="border-right: 1px solid #000; margin-top: -10px;">
+                  <thead>
+                    <tr>
+                      <th style="text-align: center; border: 1px solid #000; background-color:#B0E0E6; width: 20px">NO.</th>
+                      <th style="text-align: center; border: 1px solid #000; background-color:#B0E0E6; width: 100px">PICTURE</th>
+                      <th style="text-align: center; border: 1px solid #000; background-color:#B0E0E6; width: 80px">CATEGORY</th>
+                      <th style="text-align: center; border: 1px solid #000; background-color:#B0E0E6; width: 120px">ITEM</th>
+                      <th style="text-align: center; border: 1px solid #000; background-color:#B0E0E6; width: 140px">DESCRIPTION</th>
+                      <th style="text-align: center; border: 1px solid #000; background-color:#B0E0E6; width: 50px">QTY</th>
+                      <th style="text-align: center; border: 1px solid #000; background-color:#B0E0E6; width: 120px">PRICE LIST</th>
+                      <th style="text-align: center; border: 1px solid #000; background-color:#B0E0E6; width: 50px">DISC</th>
+                      <th style="text-align: center; border: 1px solid #000; background-color:#B0E0E6; width: 160px">TOTAL</th>
+                    </tr>
+                </thead>
+                <tbody class="invoice_tbody">
                     <t t-set="no_increment" t-value="1"/>
                     <t t-set="total_price" t-value="0"/>
+                
                     <tr t-foreach="o.order_line" t-as="sp_detail">
                         <t t-set="price" t-value="0"/>
                             <td style="text-align: center; border-bottom: 1px solid #000;border-left: 1px solid #000; border-right: 1px solid #000;">
@@ -205,6 +209,7 @@
                       <span t-esc="'{:,}'.format(int(float(total_price + o.amount_tax)))"/>  
                     </td>
                   </tr>
+                </tbody>
                 </table>
                 </div>
                 <br/><br/><br/><br/><br/><br/><br/><br/><br/><div>Note:

@@ -52,7 +52,8 @@
                     
                 </table>
 
-                <table class="table" style="border-right: 1px solid #000; margin-top: -10px;">
+                <table class="table table-condensed table-striped table-bordered" style="border-right: 1px solid #000; margin-top: -10px;">
+                  <thead>
                   <tr>
                     <th style="text-align: center; border: 1px solid #000; background-color:#B0E0E6; width: 20px">NO.</th>
                     <th style="text-align: center; border: 1px solid #000; background-color:#B0E0E6; width: 90px">NAMA BARANG</th>
@@ -62,8 +63,11 @@
                     <th style="text-align: center; border: 1px solid #000; background-color:#B0E0E6; width: 50px">DISC</th>
                     <th style="text-align: center; border: 1px solid #000; background-color:#B0E0E6; width: 150px">JUMLAH NETTO</th>
                   </tr>
+                </thead>
+                <tbody class="invoice_tbody">
                     <t t-set="no_increment" t-value="1"/>
                     <t t-set="total_price" t-value="0"/>
+                 
                     <tr t-foreach="o.order_line" t-as="inv_detail">
                             <td style="text-align: center; border-bottom: 1px solid #000;border-left: 1px solid #000; border-right: 1px solid #000;">
                               
@@ -125,6 +129,7 @@
 
                             <t t-set="no_increment" t-value="no_increment+1"/>
                       </tr>
+
                   <tr>
                   	<td colspan="2"></td>
                     <td colspan="4" style="border-left: 1px solid #000; border-top: 1px solid #000; border-bottom: 1px solid #000; background-color:#B0E0E6; text-align: right;">
@@ -178,6 +183,7 @@
                       <span t-esc="'{:,}'.format(int(float(total_price + o.amount_tax)))"/>
                     </td>
                   </tr>
+                </tbody>
                 </table>
                 <br/>
                 <br/>
