@@ -86,6 +86,7 @@ class SaleOrderLine(models.Model):
 		return line
 
 	oplos_template_id = fields.Many2one('product.template', string='Oplos', change_default=True, ondelete='restrict')
+	inventory_desc = fields.Char(string='Inventory Desc')
 
 	@api.multi
 	@api.onchange('product_id')
@@ -119,19 +120,31 @@ class SaleOrderLine(models.Model):
 			# 				(self.product_uom_qty, self.product_uom.name, self.product_id.virtual_available, self.product_id.uom_id.name, self.product_id.qty_available, self.product_id.uom_id.name)
 			# 		}
 			# 		return {'warning': warning_mess}
-					
+		inventory_desc = False
+		
+
 		for oplos in product.product_tmpl_id.sale_oplos_ids:	
 			oplos_template_ids.append(oplos.id)
-		
+		oplos_template_id = False
 		if oplos_template_ids:
 			domain['oplos_template_id'] = [('id','=',oplos_template_ids)]
+			if self.order_id.partner_id.is_auto_oplos:
+				oplos_template_id = oplos_template_ids[0]
 		else:
 			domain['oplos_template_id'] = [('id','=',False)]
 		name = product.name_get()[0][1]
 		if product.description_sale:
 			name += '\n' + product.description_sale
+
+		inventory_desc = 'Mengurangi Stock %s' % name
+		precision = self.env['decimal.precision'].precision_get('Product Unit of Measure')
+		product_qty = self.product_uom._compute_quantity(self.product_uom_qty, self.product_id.uom_id)
+		if float_compare(self.product_id.virtual_available, product_qty, precision_digits=precision) == -1:
+			inventory_desc = 'Stock %s Kurang' % name
+
 		vals['name'] = name
-		vals['oplos_template_id'] = False
+		vals['oplos_template_id'] = oplos_template_id
+		vals['inventory_desc'] = inventory_desc
 		self._compute_tax_id()
 
 		if self.order_id.pricelist_id and self.order_id.partner_id:

@@ -18,6 +18,7 @@
         'views/sale_views.xml',
         'views/account_views.xml',
         'views/stock_views.xml',
+        'views/res_partner_view.xml',
     ],
     'demo': [],
     'test': [],
