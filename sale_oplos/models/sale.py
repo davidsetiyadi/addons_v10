@@ -66,6 +66,27 @@ class SaleOrder(models.Model):
 			# for invoice in invoice_ids:
 			return self.env["report"].get_action(self, 'sale_oplos_report.report_proforma')
 
+	@api.multi
+	def action_confirm(self):
+		for order in self:
+			order.state = 'sale'
+			if order.partner_id.is_auto_oplos:
+				for line in order.order_line:
+					if line.is_valid == False:
+						warning_mess = {
+							'title': _('Not enough inventory!'),
+							'message' : _('Please check your inventory.') 
+								
+						}
+						return {'warning': warning_mess}
+			order.confirmation_date = fields.Datetime.now()
+			if self.env.context.get('send_email'):
+				self.force_quotation_send()
+			order.order_line._action_procurement_create()
+		if self.env['ir.values'].get_default('sale.config.settings', 'auto_done_setting'):
+			self.action_done()
+		return True
+
 class SaleOrderLine(models.Model):
 	_inherit = 'sale.order.line'
 
@@ -87,6 +108,7 @@ class SaleOrderLine(models.Model):
 
 	oplos_template_id = fields.Many2one('product.template', string='Oplos', change_default=True, ondelete='restrict')
 	inventory_desc = fields.Char(string='Inventory Desc')
+	is_valid = fields.Boolean(string='Valid')
 
 	@api.multi
 	@api.onchange('product_id')
@@ -121,7 +143,7 @@ class SaleOrderLine(models.Model):
 			# 		}
 			# 		return {'warning': warning_mess}
 		inventory_desc = False
-		
+		valid = True
 
 		for oplos in product.product_tmpl_id.sale_oplos_ids:	
 			oplos_template_ids.append(oplos.id)
@@ -136,15 +158,19 @@ class SaleOrderLine(models.Model):
 		if product.description_sale:
 			name += '\n' + product.description_sale
 
-		inventory_desc = 'Mengurangi Stock %s' % name
+		inventory_desc = 'Valid'
 		precision = self.env['decimal.precision'].precision_get('Product Unit of Measure')
 		product_qty = self.product_uom._compute_quantity(self.product_uom_qty, self.product_id.uom_id)
 		if float_compare(self.product_id.virtual_available, product_qty, precision_digits=precision) == -1:
-			inventory_desc = 'Stock %s Kurang' % name
+			inventory_desc = 'Stock Tidak ada'
+			valid = False
 
 		vals['name'] = name
 		vals['oplos_template_id'] = oplos_template_id
-		vals['inventory_desc'] = inventory_desc
+		if self.order_id.partner_id.is_auto_oplos:
+			vals['inventory_desc'] = inventory_desc
+			vals['is_valid'] = valid
+
 		self._compute_tax_id()
 
 		if self.order_id.pricelist_id and self.order_id.partner_id:
@@ -184,7 +210,55 @@ class SaleOrderLine(models.Model):
 			uom=self.product_uom.id
 		)
 		name = product.name_get()[0][1]
+		inventory_desc = 'Valid'
+		precision = self.env['decimal.precision'].precision_get('Product Unit of Measure')
+		product_qty = self.product_uom._compute_quantity(self.product_uom_qty, self.product_id.uom_id)
+		product_asli_available = True
+		product_oplos_available = True
+		product_asli_qty = True
+		product_oplos_qty = True
+		if float_compare(self.product_id.virtual_available, 1, precision_digits=precision) == -1:
+			product_asli_qty = False
+
+			# inventory_desc = 'Stock Tidak ada'
+		if float_compare(self.oplos_template_id.product_variant_id.virtual_available, 1, precision_digits=precision) == -1:
+			# product_variant_id
+			product_oplos_qty = False
+
+		if float_compare(self.product_id.virtual_available, product_qty, precision_digits=precision) == -1:
+			product_asli_available = False
+
+			# inventory_desc = 'Stock Tidak ada'
+		if float_compare(self.oplos_template_id.product_variant_id.virtual_available, product_qty, precision_digits=precision) == -1:
+			# product_variant_id
+			product_oplos_available = False
+
 		vals['name'] = name
+		valid = True
+		inventory_desc = ''
+		# print 'testset',product_asli_available,product_asli_qty
+		# print 'aaaa',product_oplos_available,product_oplos_available
+		if (product_asli_available == False) and (product_oplos_available == False):
+			valid = False
+			inventory_desc = 'Stock tidak ada'
+		
+		elif (product_asli_available == True) and (product_oplos_available == True):
+			valid = False
+			inventory_desc = 'Stock lebih dari 1 jenis'
+
+		elif (product_asli_available or product_asli_qty) != (product_oplos_qty or product_oplos_available):
+			valid = True
+			inventory_desc= 'Valid'
+			# print 'suksessss'
+		else:
+			valid = False
+			inventory_desc = 'Stock lebih dari 1 jenis'
+					
+			
+
+		if self.order_id.partner_id.is_auto_oplos:
+			vals['inventory_desc'] = inventory_desc
+			vals['is_valid'] = valid
 		if self.oplos_template_id:
 			vals['name'] = self.oplos_template_id.name_get()[0][1]
 		if self.order_id.pricelist_id and self.order_id.partner_id:			
